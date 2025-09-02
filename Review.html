@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Review Page</title>
+</head>
+<body>
+  <h2>Leave a Review</h2>
+  <input type="text" id="reviewInput" placeholder="Type review here">
+  <button onclick="submitReview()">Enter</button>
+
+  <div id="reviewOutput"></div>
+  <br>
+   
+  <a href="index.html">
+    <button style="background-color: #000000; color: white; font-size: 16px; font-weight: bold; letter-spacing: 1px;">
+      Home
+    </button>
+  </a>
+
+  <br><br>
+  <a href="reset.html"><button>Reset</button></a>
+
+  <script>
+    window.onload = function() {
+      const savedReviews = JSON.parse(localStorage.getItem("reviews")) || [];
+      const output = document.getElementById("reviewOutput");
+      savedReviews.forEach(function(review) {
+        const p = document.createElement("p");
+        p.textContent = review;
+        output.appendChild(p);
+      });
+    };
+
+    function submitReview() {
+      const input = document.getElementById("reviewInput").value;
+      const output = document.getElementById("reviewOutput");
+
+      if (input.trim() !== "") {
+        const p = document.createElement("p");
+        p.textContent = input;
+        output.appendChild(p);
+
+        const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+        reviews.push(input);
+        localStorage.setItem("reviews", JSON.stringify(reviews));
+
+        document.getElementById("reviewInput").value = "";
+      }
+    }
+  </script>
+</body>
+</html>
