@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cars</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    #searchBar {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    fieldset {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .car {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cars</h1>
+
+  <a href="index.html">
+    <button style="background-color: #000000; color: white; font-size: 16px; font-weight: bold; letter-spacing: 1px;">
+      Home
+    </button>
+  </a>
+
+  <!-- Search Bar -->
+  <input type="text" id="searchBar" placeholder="Search Velora models..." />
+
+  <!-- Car Listings -->
+  <div id="carList">
+    <fieldset class="car">
+      <h3>Velora Nebulon</h3>
+      <h4>A high performance electric coupe</h4>
+    </fieldset>
+
+    <fieldset class="car">
+      <h3>Velora LX-Nova</h3>
+      <h4>A luxury sports car with a lot of tech</h4>
+    </fieldset>
+
+    <fieldset class="car">
+      <h3>Velora DriftStar</h3>
+      <h4>A sports model built for speed, drifting and style</h4>
+    </fieldset>
+
+    <fieldset class="car">
+      <h3>Velora Eclipse R</h3>
+      <h4>Velora's 2nd fastest car</h4>
+    </fieldset>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const searchBar = document.getElementById("searchBar");
+    const carItems = document.querySelectorAll(".car");
+
+    searchBar.addEventListener("input", () => {
+      const query = searchBar.value.toLowerCase();
+
+      const scoredCars = Array.from(carItems).map(car => {
+        const name = car.querySelector("h3").textContent.toLowerCase();
+        const score = getSimilarityScore(query, name);
+        return { element: car, score };
+      });
+
+      scoredCars.sort((a, b) => b.score - a.score);
+
+      // Clear and re-add sorted cars
+      const carList = document.getElementById("carList");
+      carList.innerHTML = "";
+      scoredCars.forEach(car => {
+        if (car.score > 0 || query === "") {
+          car.element.style.display = "block";
+          carList.appendChild(car.element);
+        } else {
+          car.element.style.display = "none";
+        }
+      });
+    });
+
+    function getSimilarityScore(a, b) {
+      let score = 0;
+      for (let char of a) {
+        if (b.includes(char)) score++;
+      }
+      return score;
+    }
+  </script>
+</body>
+</html>
